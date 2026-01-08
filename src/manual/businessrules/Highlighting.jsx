@@ -50,7 +50,7 @@ export default function Highlighting() {
         'Gender populated from GENDER',
         'Additional Languages populated from LANGUAGES'
       ],
-      location: 'Individual cells that were populated via fallback'
+      location: 'Individual cells that were populated via fallback logic'
     },
     {
       id: 3,
