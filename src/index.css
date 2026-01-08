@@ -1,0 +1,304 @@
+/* @tailwind directives are processed by PostCSS - linter warnings can be ignored */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Zocdoc brand font - Sharp Sans */
+/* If you have Sharp Sans font files, add @font-face declarations here */
+/* Example:
+@font-face {
+  font-family: 'Sharp Sans';
+  src: url('/fonts/SharpSans-Bold.woff2') format('woff2'),
+       url('/fonts/SharpSans-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+.zocdoc-font {
+  font-family: 'Sharp Sans', 'Sharp Sans No.1', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #000769;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.5), 0 0 10px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 25px rgba(59, 130, 246, 0.5);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 1s ease-in-out infinite;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    height: auto;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(10px);
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-out {
+  animation: slideOut 0.4s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.4s ease-out;
+}
+
+.animate-slide-out-left {
+  animation: slideOutToLeft 0.4s ease-out forwards;
+}
+
+@keyframes expandBreadcrumb {
+  from {
+    width: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  to {
+    width: auto;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.breadcrumb-container {
+  transition: all 0.3s ease-out;
+  overflow: hidden;
+}
+
+.breadcrumb-container:hover,
+.breadcrumb-container.breadcrumb-expanded {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.breadcrumb-content {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  transition: gap 0.3s ease-out;
+}
+
+.breadcrumb-container:hover .breadcrumb-content,
+.breadcrumb-container.breadcrumb-expanded .breadcrumb-content {
+  gap: 1rem;
+}
+
+.breadcrumb-item {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+
+.breadcrumb-container:hover .breadcrumb-item,
+.breadcrumb-container.breadcrumb-expanded .breadcrumb-item {
+  opacity: 1;
+  width: auto;
+}
+
+.breadcrumb-current-indicator {
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+}
+
+.breadcrumb-container:hover .breadcrumb-current-indicator,
+.breadcrumb-container.breadcrumb-expanded .breadcrumb-current-indicator {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.breadcrumb-divider {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease-out;
+}
+
+.breadcrumb-container:hover .breadcrumb-divider,
+.breadcrumb-container.breadcrumb-expanded .breadcrumb-divider {
+  opacity: 1;
+  width: 3rem;
+}
+
+@keyframes expandPanel {
+  from {
+    max-height: 0;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    max-height: 500px;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes collapsePanel {
+  from {
+    max-height: 500px;
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.smart-learning-expand {
+  animation: expandPanel 0.3s ease-out forwards;
+}
+
+.smart-learning-collapse {
+  animation: collapsePanel 0.3s ease-out forwards;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes backdropFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+.animate-modal-fade-in {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.animate-modal-fade-out {
+  animation: modalFadeOut 0.3s ease-out forwards;
+}
+
+.animate-backdrop-fade-in {
+  animation: backdropFadeIn 0.3s ease-out;
+}
+
+.animate-backdrop-fade-out {
+  animation: backdropFadeOut 0.3s ease-out forwards;
+}
