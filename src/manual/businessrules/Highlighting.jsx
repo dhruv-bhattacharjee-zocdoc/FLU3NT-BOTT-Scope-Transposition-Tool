@@ -288,7 +288,6 @@ export default function Highlighting() {
         <p className="text-sm font-medium text-red-800 mb-2">⚠️ Important:</p>
         <ul className="text-sm text-red-700 space-y-1 list-disc list-inside">
           <li>Yellow highlights require manual review - some data may be truncated</li>
-          <li>Yellow highlights require manual review - some data may be truncated</li>
           <li>Blue highlights indicate fallback data - verify against source if needed</li>
           <li>Highlighting is applied during the packing process automatically</li>
           <li>You can remove highlighting manually in Excel if needed</li>
