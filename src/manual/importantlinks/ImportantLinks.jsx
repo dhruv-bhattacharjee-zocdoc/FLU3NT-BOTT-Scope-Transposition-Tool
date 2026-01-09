@@ -34,7 +34,7 @@ export default function ImportantLinks() {
     {
       id: 4,
       title: 'GitHub Repository',
-      description: 'Source code repository for the FLU3NT BOTT Scope Transposition Tool',
+      description: 'Source code repository for the FLU3NT BOTT Scope Transposition Tool for further development',
       url: 'https://github.com/dhruv-bhattacharjee-zocdoc/FLU3NT-BOTT-Scope-Transposition-Tool',
       category: 'Development',
       icon: Github
