@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Package, FileText, Play, Download, ChevronDown } from 'lucide-react';
 
@@ -8,14 +8,30 @@ import { CheckCircle, Package, FileText, Play, Download, ChevronDown } from 'luc
 export default function PackingSystem() {
   const [hoveredStep, setHoveredStep] = useState(null);
   const [expandedSteps, setExpandedSteps] = useState(new Set());
+  const [delayedContent, setDelayedContent] = useState(new Set());
+  const timeoutRefs = useRef({});
   
   const toggleStep = (stepId) => {
     setExpandedSteps(prev => {
       const newSet = new Set(prev);
       if (newSet.has(stepId)) {
         newSet.delete(stepId);
+        // Clear timeout and remove from delayed content if collapsing
+        if (timeoutRefs.current[stepId]) {
+          clearTimeout(timeoutRefs.current[stepId]);
+          delete timeoutRefs.current[stepId];
+        }
+        setDelayedContent(prev => {
+          const newDelayed = new Set(prev);
+          newDelayed.delete(stepId);
+          return newDelayed;
+        });
       } else {
         newSet.add(stepId);
+        // Set timeout for delayed content
+        timeoutRefs.current[stepId] = setTimeout(() => {
+          setDelayedContent(prev => new Set(prev).add(stepId));
+        }, 1000);
       }
       return newSet;
     });
@@ -87,6 +103,37 @@ export default function PackingSystem() {
     }
   ];
 
+  // Handle hover delay
+  useEffect(() => {
+    steps.forEach(step => {
+      const isHovered = hoveredStep === step.id;
+      const isExpanded = expandedSteps.has(step.id);
+      const shouldShow = isHovered || isExpanded;
+      
+      if (shouldShow) {
+        // Clear any existing timeout
+        if (timeoutRefs.current[step.id]) {
+          clearTimeout(timeoutRefs.current[step.id]);
+        }
+        // Set timeout for delayed content
+        timeoutRefs.current[step.id] = setTimeout(() => {
+          setDelayedContent(prev => new Set(prev).add(step.id));
+        }, 1000);
+      } else {
+        // Clear timeout and remove from delayed content
+        if (timeoutRefs.current[step.id]) {
+          clearTimeout(timeoutRefs.current[step.id]);
+          delete timeoutRefs.current[step.id];
+        }
+        setDelayedContent(prev => {
+          const newDelayed = new Set(prev);
+          newDelayed.delete(step.id);
+          return newDelayed;
+        });
+      }
+    });
+  }, [hoveredStep, expandedSteps]);
+
   return (
     <div className="prose prose-neutral max-w-none">
       <h3 className="text-2xl font-semibold text-neutral-800 mb-4">
@@ -114,7 +161,8 @@ export default function PackingSystem() {
           const Icon = step.icon;
           const isHovered = hoveredStep === step.id;
           const isExpanded = expandedSteps.has(step.id);
-          const showContent = isHovered || isExpanded;
+          const shouldShowContent = isHovered || isExpanded;
+          const showContent = delayedContent.has(step.id);
           
           const colorClasses = {
             blue: 'border-blue-500 bg-gradient-to-r from-blue-50 to-blue-100/50 hover:from-blue-100 hover:to-blue-200/50',
@@ -182,7 +230,7 @@ export default function PackingSystem() {
                         {step.title}
                       </h4>
                       <motion.div
-                        animate={{ rotate: showContent ? 180 : 0 }}
+                        animate={{ rotate: shouldShowContent ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
                         <ChevronDown className="h-5 w-5 text-neutral-400 flex-shrink-0" />
@@ -228,30 +276,12 @@ export default function PackingSystem() {
       </div>
 
       <motion.div 
-        className="bg-amber-50 border-l-4 border-amber-500 p-4 my-6 rounded-r"
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{
-          duration: 0.4,
-          delay: 0.6,
-          ease: "easeOut"
-        }}
-      >
-        <p className="text-sm font-medium text-amber-800 mb-2">Additional Options:</p>
-        <ul className="text-sm text-amber-700 space-y-1 list-disc list-inside">
-          <li><strong>Delete Excel Files:</strong> Removes all intermediate Excel files from the backend directory</li>
-          <li><strong>Cancel:</strong> Closes the packing dialog without packing</li>
-          <li>The dialog cannot be closed while packing is in progress</li>
-        </ul>
-      </motion.div>
-
-      <motion.div 
         className="bg-green-50 border-l-4 border-green-500 p-4 my-6 rounded-r"
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{
           duration: 0.4,
-          delay: 0.7,
+          delay: 0.6,
           ease: "easeOut"
         }}
       >

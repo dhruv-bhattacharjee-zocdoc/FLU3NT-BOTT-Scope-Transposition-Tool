@@ -328,6 +328,17 @@ export default function MappingWorkflowModal({ isOpen, onClose }) {
     { detectedAs: 'NPI', columnName: 'NPI Number' },
   ];
 
+  const stepDescriptions = {
+    1: "Upload your Excel file containing provider or location data to begin the mapping process.",
+    2: "Review the detected column headers and example values to understand your data structure.",
+    3: "Click on column headers to map them to Zocdoc fields, or use the suggested mappings to speed up the process.",
+    4: "Ensure all required mappings are completed - these are essential for successful data transposition.",
+    5: "Enter the Practice ID(s) to link your mapped data to the correct practice in the system.",
+    6: "Review all your mappings in the Mappings panel to verify everything is correct before converting.",
+    7: "Click 'Convert' to begin the data extraction and transposition process according to your mappings.",
+    8: "Monitor the progress indicator to track the conversion status and download files when ready."
+  };
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -337,8 +348,8 @@ export default function MappingWorkflowModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <motion.div
-        className="bg-white rounded-lg shadow-2xl p-8 max-w-7xl w-full mx-4"
-        style={{ height: '90vh', maxHeight: '900px', overflowY: 'auto' }}
+        className="bg-white rounded-lg shadow-2xl p-8 max-w-[85.5vw] w-full mx-4"
+        style={{ height: '85.5vh', maxHeight: '1080px', overflowY: 'auto' }}
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
@@ -401,7 +412,7 @@ export default function MappingWorkflowModal({ isOpen, onClose }) {
 
         <div 
           ref={containerRef}
-          className="relative bg-neutral-50 rounded-lg border-2 border-blue-300 shadow-sm p-6 min-h-[500px]"
+          className="relative bg-neutral-50 rounded-lg border-2 border-blue-300 shadow-sm p-6 min-h-[630px]"
         >
           {/* Animated Mouse Pointer */}
           {(animationStep >= 1) && (
@@ -679,6 +690,20 @@ export default function MappingWorkflowModal({ isOpen, onClose }) {
             </motion.div>
           )}
         </div>
+
+        {/* Step-by-Step Write-ups Section */}
+        {currentStep > 0 && stepDescriptions[currentStep] && (
+          <motion.div
+            className="mt-4 pt-4 border-t border-neutral-200"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <p className="text-sm text-neutral-600 italic">
+              {stepDescriptions[currentStep]}
+            </p>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );

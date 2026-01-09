@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { AlertTriangle, Database, CheckCircle, ChevronDown, Edit } from 'lucide-react';
 
@@ -8,14 +8,30 @@ import { AlertTriangle, Database, CheckCircle, ChevronDown, Edit } from 'lucide-
 export default function Highlighting() {
   const [hoveredStep, setHoveredStep] = useState(null);
   const [expandedSteps, setExpandedSteps] = useState(new Set());
+  const [delayedContent, setDelayedContent] = useState(new Set());
+  const timeoutRefs = useRef({});
   
   const toggleStep = (stepId) => {
     setExpandedSteps(prev => {
       const newSet = new Set(prev);
       if (newSet.has(stepId)) {
         newSet.delete(stepId);
+        // Clear timeout and remove from delayed content if collapsing
+        if (timeoutRefs.current[stepId]) {
+          clearTimeout(timeoutRefs.current[stepId]);
+          delete timeoutRefs.current[stepId];
+        }
+        setDelayedContent(prev => {
+          const newDelayed = new Set(prev);
+          newDelayed.delete(stepId);
+          return newDelayed;
+        });
       } else {
         newSet.add(stepId);
+        // Set timeout for delayed content
+        timeoutRefs.current[stepId] = setTimeout(() => {
+          setDelayedContent(prev => new Set(prev).add(stepId));
+        }, 1000);
       }
       return newSet;
     });
@@ -80,6 +96,36 @@ export default function Highlighting() {
     }
   ];
 
+  // Handle hover delay
+  useEffect(() => {
+    highlightTypes.forEach(step => {
+      const isHovered = hoveredStep === step.id;
+      const isExpanded = expandedSteps.has(step.id);
+      const shouldShow = isHovered || isExpanded;
+      
+      if (shouldShow) {
+        // Clear any existing timeout
+        if (timeoutRefs.current[step.id]) {
+          clearTimeout(timeoutRefs.current[step.id]);
+        }
+        // Set timeout for delayed content
+        timeoutRefs.current[step.id] = setTimeout(() => {
+          setDelayedContent(prev => new Set(prev).add(step.id));
+        }, 1000);
+      } else {
+        // Clear timeout and remove from delayed content
+        if (timeoutRefs.current[step.id]) {
+          clearTimeout(timeoutRefs.current[step.id]);
+          delete timeoutRefs.current[step.id];
+        }
+        setDelayedContent(prev => {
+          const newDelayed = new Set(prev);
+          newDelayed.delete(step.id);
+          return newDelayed;
+        });
+      }
+    });
+  }, [hoveredStep, expandedSteps]);
 
   return (
     <div className="prose prose-neutral max-w-none">
@@ -106,7 +152,8 @@ export default function Highlighting() {
           const Icon = highlight.icon;
           const isHovered = hoveredStep === highlight.id;
           const isExpanded = expandedSteps.has(highlight.id);
-          const showContent = isHovered || isExpanded;
+          const shouldShowContent = isHovered || isExpanded;
+          const showContent = delayedContent.has(step.id);
           
           const colorClasses = {
             yellow: 'border-yellow-500 bg-gradient-to-r from-yellow-50 to-yellow-100/50 hover:from-yellow-100 hover:to-yellow-200/50',
@@ -179,7 +226,7 @@ export default function Highlighting() {
                         </h4>
                       </div>
                       <motion.div
-                        animate={{ rotate: showContent ? 180 : 0 }}
+                        animate={{ rotate: shouldShowContent ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
                       >
                         <ChevronDown className="h-5 w-5 text-neutral-400 flex-shrink-0" />
