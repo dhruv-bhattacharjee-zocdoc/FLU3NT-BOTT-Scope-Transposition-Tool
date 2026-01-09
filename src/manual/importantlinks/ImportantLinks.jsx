@@ -120,7 +120,7 @@ export default function ImportantLinks() {
         <p className="text-sm font-medium text-amber-800 mb-2">Note:</p>
         <ul className="text-sm text-amber-700 space-y-1 list-disc list-inside">
           <li>links open in a new tab</li>
-          <li>Make sure you have appropriate access permissions for Google Docs and Jira</li>
+          <li>Make sure you have appropriate access permissions for Google Docs</li>
           <li>For technical questions, refer to the Tech Spec document</li>
           <li>For issues or feature requests, use the Bug / Suggestion link</li>
         </ul>
