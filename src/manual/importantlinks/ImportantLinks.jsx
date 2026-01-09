@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ExternalLink, FileText, Bug, Settings, Github, RefreshCw } from 'lucide-react';
+import { ExternalLink, FileText, Bug, Settings, Github } from 'lucide-react';
+
+// Tool version - update this when releasing a new version
+const TOOL_VERSION = '1.1';
 
 /**
  * Important Links - Content Component
@@ -34,18 +37,10 @@ export default function ImportantLinks() {
     {
       id: 4,
       title: 'GitHub Repository',
-      description: 'Source code repository for the FLU3NT BOTT Scope Transposition Tool for further development',
+      description: 'Source code repository for the FLU3NT BOTT Scope Transposition Tool',
       url: 'https://github.com/dhruv-bhattacharjee-zocdoc/FLU3NT-BOTT-Scope-Transposition-Tool',
       category: 'Development',
       icon: Github
-    },
-    {
-      id: 5,
-      title: 'Check Update',
-      description: 'Check for updates',
-      url: '#',
-      category: 'Update',
-      icon: RefreshCw
     }
   ];
 
@@ -69,7 +64,7 @@ export default function ImportantLinks() {
           return (
             <motion.div
               key={link.id}
-              className="border-l-4 border-blue-500 pl-4 py-4 bg-blue-50 rounded-r hover:bg-blue-100 transition-colors cursor-pointer group"
+              className="border-l-4 border-blue-500 pl-4 py-4 bg-blue-50 rounded-r hover:bg-blue-100 transition-colors cursor-pointer group relative"
               onClick={() => handleLinkClick(link.url)}
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -100,6 +95,13 @@ export default function ImportantLinks() {
                   </div>
                 </div>
               </div>
+              {link.id === 4 && (
+                <div className="absolute bottom-2 right-2">
+                  <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                    v {TOOL_VERSION}
+                  </span>
+                </div>
+              )}
             </motion.div>
           );
         })}
