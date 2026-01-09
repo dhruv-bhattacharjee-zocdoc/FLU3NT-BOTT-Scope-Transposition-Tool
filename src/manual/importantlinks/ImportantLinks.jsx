@@ -42,7 +42,7 @@ export default function ImportantLinks() {
     {
       id: 5,
       title: 'Check Update',
-      description: 'Click to check for updates',
+      description: 'Check for updates',
       url: '#',
       category: 'Update',
       icon: RefreshCw
